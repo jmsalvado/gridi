@@ -3,8 +3,8 @@ package com.example.service;
 import java.util.List;
 import java.util.Optional;
 
-import gridi.entity.Incidencia;
-import gridi.entity.Usuario;
+import com.example.entity.Incidencia;
+import com.example.entity.Usuario;
 
 public interface GridiService {
 

@@ -6,10 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import gridi.entity.Incidencia;
-import gridi.entity.Usuario;
-import gridi.repository.IncidenciaRepository;
-import gridi.repository.UsuarioRepository;
+import com.example.entity.Incidencia;
+import com.example.entity.Usuario;
+import com.example.repository.IncidenciaRepository;
+import com.example.repository.UsuarioRepository;
 
 @Service
 public class GridiServiceImpl implements GridiService {
