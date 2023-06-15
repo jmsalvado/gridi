@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Lista de Comentarios</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .btn {
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn-create {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .btn-delete {
+      background-color: #f44336;
+      color: white;
+    }
+    .btn-edit {
+      background-color: #2196F3;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<h1>Lista de Comentarios</h1>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Contenido</th>
+    <th>Fecha</th>
+    <th>Acciones</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="comentario : ${comentarios}">
+    <td th:text="${comentario.id}"></td>
+    <td th:text="${comentario.contenido}"></td>
+    <td th:text="${comentario.fecha}"></td>
+    <td>
+      <button class="btn btn-edit">Editar</button>
+      <button class="btn btn-delete">Borrar</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<div>
+  <button class="btn btn-create">Crear Comentario</button>
+</div>
+</body>
+</html>

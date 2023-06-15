@@ -6,6 +6,6 @@ import com.example.entity.Incidencia;
 
 public interface IncidenciaRepository extends JpaRepository<Incidencia, String> {
 
-	Optional<Incidencia> findById(String id);
+	Optional<Incidencia> findById(Long id);
 	
 }
