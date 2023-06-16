@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulario de Métrica</title>
+</head>
+<body>
+<h1>Formulario de Métrica</h1>
+
+<form th:object="${metrica}" th:action="@{/metricas/save}" method="post">
+  <input type="hidden" th:field="*{id}">
+
+  <label for="nombre">Nombre:</label>
+  <input type="text" id="nombre" th:field="*{nombre}">
+
+  <label for="valor">Valor:</label>
+  <input type="number" id="valor" th:field="*{valor}">
+
+  <button type="submit">Guardar</button>
+  <button type="button" onclick="window.location.href='/metricas'">Cancelar</button>
+  <button type="button" onclick="borrarMetrica()">Borrar</button>
+</form>
+
+<script th:inline="javascript">
+  function borrarMetrica() {
+    if (confirm("¿Estás seguro de que deseas borrar la métrica?")) {
+      window.location.href = '/metricas/delete/' + [[${metrica.id}]];
+    }
+  }
+</script>
+</body>
+</html>

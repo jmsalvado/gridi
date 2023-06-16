@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulario de Comentario</title>
+</head>
+<body>
+<h1>Formulario de Comentario</h1>
+
+<form th:object="${comentario}" th:action="@{/comentarios/save}" method="post">
+  <input type="hidden" th:field="*{id}">
+
+  <label for="contenido">Contenido:</label>
+  <textarea id="contenido" th:field="*{contenido}"></textarea>
+
+  <label for="fecha">Fecha:</label>
+  <input type="text" id="fecha" th:field="*{fecha}">
+
+  <button type="submit">Guardar</button>
+  <button type="button" onclick="window.location.href='/comentarios'">Cancelar</button>
+  <button type="button" onclick="borrarComentario()">Borrar</button>
+</form>
+
+<script th:inline="javascript">
+  function borrarComentario() {
+    if (confirm("¿Estás seguro de que deseas borrar el comentario?")) {
+      window.location.href = '/comentarios/delete/' + [[${comentario.id}]];
+    }
+  }
+</script>
+</body>
+</html>

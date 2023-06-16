@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulario de Incidencia</title>
+</head>
+<body>
+<h1>Formulario de Incidencia</h1>
+
+<form th:object="${incidencia}" th:action="@{/incidencias/save}" method="post">
+  <input type="hidden" th:field="*{id}">
+
+  <label for="descripcion">Descripción:</label>
+  <textarea id="descripcion" th:field="*{descripcion}"></textarea>
+
+  <label for="prioridad">Prioridad:</label>
+  <select id="prioridad" th:field="*{prioridad}">
+    <option value="Alta">Alta</option>
+    <option value="Media">Media</option>
+    <option value="Baja">Baja</option>
+  </select>
+
+  <label for="categoria">Categoría:</label>
+  <input type="text" id="categoria" th:field="*{categoria}">
+
+  <label for="estado">Estado:</label>
+  <select id="estado" th:field="*{estado}">
+    <option value="Abierta">Abierta</option>
+    <option value="En progreso">En progreso</option>
+    <option value="Cerrada">Cerrada</option>
+  </select>
+
+  <label for="fechaCreacion">Fecha de Creación:</label>
+  <input type="text" id="fechaCreacion" th:field="*{fechaCreacion}">
+
+  <h2>Comentarios</h2>
+  <ul id="comentariosList">
+    <li th:each="comentario : ${incidencia.comentarios}">
+      <span th:text="${comentario.contenido}"></span>
+    </li>
+  </ul>
+
+  <label for="nuevoComentario">Agregar Comentario:</label>
+  <input type="text" id="nuevoComentario" th:field="*{nuevoComentario}">
+  <button type="button" onclick="agregarComentario()">Agregar</button>
+
+  <h2>Adjuntos</h2>
+  <ul id="adjuntosList">
+    <li th:each="adjunto : ${incidencia.adjuntos}">
+      <a th:href="${adjunto.rutaArchivo}" th:text="${adjunto.nombreArchivo}"></a>
+    </li>
+  </ul>
+
+  <label for="nuevoAdjunto">Agregar Adjunto:</label>
+  <input type="file" id="nuevoAdjunto" th:field="*{nuevoAdjunto}">
+  <button type="button" onclick="agregarAdjunto()">Agregar</button>
+
+  <h2>Usuarios</h2>
+  <ul id="usuariosList">
+    <li th:each="usuario : ${incidencia.usuarios}">
+      <span th:text="${usuario.nombre}"></span> - <span th:text="${usuario.correoElectronico}"></span>
+    </li>
+  </ul>
+
+  <label for="nuevoUsuarioNombre">Nombre Usuario:</label>
+  <input type="text" id="nuevoUsuarioNombre" th:field="*{nuevoUsuarioNombre}">
+
+  <label for="nuevoUsuarioCorreo">Correo Electrónico Usuario:</label>
+  <input type="text" id="nuevoUsuarioCorreo" th:field="*{nuevoUsuarioCorreo}">
+  <button type="button" onclick="agregarUsuario()">Agregar</button>
+
+  <button type="submit">Guardar</button>
+  <button type="button" onclick="window.location.href='/incidencias'">Cancelar</button>
+  <button type="button" onclick="borrarIncidencia()">Borrar</button>
+</form>
+
+<script th:inline="javascript">
+  function agregarComentario() {
+    var nuevoComentario = document.getElementById("nuevoComentario").value;
+
+    if (nuevoComentario.trim() !== "") {
+      var comentariosList = document.getElementById("comentariosList");
+
+      var newComment = document.createElement("li");
+      newComment.textContent = nuevoComentario;
+      comentariosList.appendChild(newComment);
+
+      document.getElementById("nuevoComentario").value = "";
+    }
+  }
+
+  function agregarAdjunto() {
+    var nuevoAdjunto = document.getElementById("nuevoAdjunto");
+
+    if (nuevoAdjunto.files.length > 0) {
+      var adjuntosList = document.getElementById("adjuntosList");
+
+      var newAttachment = document.createElement("li");
+      var link = document.createElement("a");
+      link.href = URL.createObjectURL(nuevoAdjunto.files[0]);
+      link.textContent = nuevoAdjunto.files[0].name;
+
+      newAttachment.appendChild(link);
+      adjuntosList.appendChild(newAttachment);
+
+      document.getElementById("nuevoAdjunto").value = null;
+    }
+  }
+
+  function agregarUsuario() {
+    var nuevoUsuarioNombre = document.getElementById("nuevoUsuarioNombre").value;
+    var nuevoUsuarioCorreo = document.getElementById("nuevoUsuarioCorreo").value;
+
+    if (nuevoUsuarioNombre.trim() !== "" && nuevoUsuarioCorreo.trim() !== "") {
+      var usuariosList = document.getElementById("usuariosList");
+
+      var newUsuario = document.createElement("li");
+      newUsuario.innerHTML = "<span>" + nuevoUsuarioNombre + "</span> - <span>" + nuevoUsuarioCorreo + "</span>";
+      usuariosList.appendChild(newUsuario);
+
+      document.getElementById("nuevoUsuarioNombre").value = "";
+      document.getElementById("nuevoUsuarioCorreo").value = "";
+    }
+  }
+
+  function borrarIncidencia() {
+    if (confirm("¿Estás seguro de que deseas borrar la incidencia?")) {
+      window.location.href = '/incidencias/delete/' + [[${incidencia.id}]];
+    }
+  }
+</script>
+</body>
+</html>

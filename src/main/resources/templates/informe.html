@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulario de Informe</title>
+</head>
+<body>
+<h1>Formulario de Informe</h1>
+
+<form th:object="${informe}" th:action="@{/informes/save}" method="post">
+  <input type="hidden" th:field="*{id}">
+
+  <label for="titulo">Título:</label>
+  <input type="text" id="titulo" th:field="*{titulo}">
+
+  <label for="descripcion">Descripción:</label>
+  <textarea id="descripcion" th:field="*{descripcion}"></textarea>
+
+  <h2>Métricas</h2>
+  <ul id="metricasList">
+    <li th:each="metrica : ${informe.metricas}">
+      <span th:text="${metrica.nombre}"></span> - <span th:text="${metrica.valor}"></span>
+    </li>
+  </ul>
+
+  <label for="nuevaMetricaNombre">Nombre Métrica:</label>
+  <input type="text" id="nuevaMetricaNombre" th:field="*{nuevaMetricaNombre}">
+
+  <label for="nuevaMetricaValor">Valor Métrica:</label>
+  <input type="text" id="nuevaMetricaValor" th:field="*{nuevaMetricaValor}">
+
+  <button type="button" onclick="agregarMetrica()">Agregar Métrica</button>
+
+  <h2>Usuarios</h2>
+  <ul id="usuariosList">
+    <li th:each="usuario : ${informe.usuarios}">
+      <span th:text="${usuario.nombre}"></span> - <span th:text="${usuario.correoElectronico}"></span>
+    </li>
+  </ul>
+
+  <label for="nuevoUsuarioNombre">Nombre Usuario:</label>
+  <input type="text" id="nuevoUsuarioNombre" th:field="*{nuevoUsuarioNombre}">
+
+  <label for="nuevoUsuarioCorreo">Correo Electrónico Usuario:</label>
+  <input type="text" id="nuevoUsuarioCorreo" th:field="*{nuevoUsuarioCorreo}">
+
+  <button type="button" onclick="agregarUsuario()">Agregar Usuario</button>
+
+  <button type="submit">Guardar</button>
+  <button type="button" onclick="window.location.href='/informes'">Cancelar</button>
+  <button type="button" onclick="borrarInforme()">Borrar</button>
+</form>
+
+<script th:inline="javascript">
+  function agregarMetrica() {
+    var nuevaMetricaNombre = document.getElementById("nuevaMetricaNombre").value;
+    var nuevaMetricaValor = document.getElementById("nuevaMetricaValor").value;
+
+    if (nuevaMetricaNombre.trim() !== "" && nuevaMetricaValor.trim() !== "") {
+      var metricasList = document.getElementById("metricasList");
+
+      var newMetrica = document.createElement("li");
+      newMetrica.innerHTML = "<span>" + nuevaMetricaNombre + "</span> - <span>" + nuevaMetricaValor + "</span>";
+      metricasList.appendChild(newMetrica);
+
+      document.getElementById("nuevaMetricaNombre").value = "";
+      document.getElementById("nuevaMetricaValor").value = "";
+    }
+  }
+
+  function agregarUsuario() {
+    var nuevoUsuarioNombre = document.getElementById("nuevoUsuarioNombre").value;
+    var nuevoUsuarioCorreo = document.getElementById("nuevoUsuarioCorreo").value;
+
+    if (nuevoUsuarioNombre.trim() !== "" && nuevoUsuarioCorreo.trim() !== "") {
+      var usuariosList = document.getElementById("usuariosList");
+
+      var newUsuario = document.createElement("li");
+      newUsuario.innerHTML = "<span>" + nuevoUsuarioNombre + "</span> - <span>" + nuevoUsuarioCorreo + "</span>";
+      usuariosList.appendChild(newUsuario);
+
+      document.getElementById("nuevoUsuarioNombre").value = "";
+      document.getElementById("nuevoUsuarioCorreo").value = "";
+    }
+  }
+
+  function borrarInforme() {
+    if (confirm("¿Estás seguro de que deseas borrar el informe?")) {
+      window.location.href = '/informes/delete/' + [[${informe.id}]];
+    }
+  }
+</script>
+</body>
+</html>
