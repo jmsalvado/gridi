@@ -5,6 +5,7 @@ import com.example.service.ProyectoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +18,10 @@ public class ProyectoController {
     private ProyectoService proyectoService;
 
     @GetMapping
-    public ResponseEntity<List<Proyecto>> obtenerProyectos() {
-        List<Proyecto> proyectos = proyectoService.obtenerTodosLosProyectos();
-        return ResponseEntity.ok(proyectos);
+    public String proyectos(Model model) {
+        //List<Proyecto> proyectos = proyectoService.obtenerTodosLosProyectos();
+        //model.addAttribute("proyectos", proyectos);
+        return "proyectos.html";
     }
 
     @GetMapping("/{id}")

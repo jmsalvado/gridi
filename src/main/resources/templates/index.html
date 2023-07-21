@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <title>Gestor de Resolución de Incidencias y Desarrollo Inteligente</title>
     <style>
@@ -39,8 +39,8 @@
     permitiéndote realizar un seguimiento de las mismas, asignar prioridades, agregar comentarios,
     adjuntar archivos y generar informes de métricas.</p>
 <div class="container">
-    <a href="/proyectos" class="button">Ir a Proyectos</a>
-    <a href="/usuarios" class="button">Ir a Usuarios</a>
+    <a th:href="@{/proyectos}" class="button">Ir a Proyectos</a>
+    <a th:href="@{/usuarios}" class="button">Ir a Usuarios</a>
 </div>
 </body>
 </html>
