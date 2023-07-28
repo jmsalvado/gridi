@@ -3,8 +3,6 @@ package com.example.gridi.controller;
 import com.example.gridi.entity.Proyecto;
 import com.example.gridi.service.ProyectoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,44 +18,38 @@ public class ProyectoController {
     @GetMapping("/proyectos")
     public String proyectos(Model model) {
         List<Proyecto> proyectos = proyectoService.obtenerTodosLosProyectos();
+        model.addAttribute("proyectos", proyectos);
         return "proyectos";
     }
 
-    @GetMapping("/obtenerProyectoPorId/{id}")
-    public ResponseEntity<Proyecto> obtenerProyectoPorId(@PathVariable Long id) {
+    @GetMapping("/proyecto")
+    public String proyecto(Model model) {
+        model.addAttribute("proyecto", new Proyecto());
+        return "proyecto";
+    }
+
+    @GetMapping("/proyecto/editar/{id}")
+    public String editar(Model model, @PathVariable int id) {
         Proyecto proyecto = proyectoService.obtenerProyectoPorId(id);
-        if (proyecto != null) {
-            return ResponseEntity.ok(proyecto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        model.addAttribute("proyecto", proyecto);
+        return "proyecto";
     }
 
-    @PostMapping("/crearProyecto")
-    public ResponseEntity<Proyecto> crearProyecto(@RequestBody Proyecto proyecto) {
-        Proyecto nuevoProyecto = proyectoService.crearProyecto(proyecto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoProyecto);
+    @PostMapping("/proyecto/guardar")
+    public String guardar(Model model, @ModelAttribute Proyecto proyecto) {
+        proyectoService.actualizarProyecto(proyecto);
+        List<Proyecto> proyectos = proyectoService.obtenerTodosLosProyectos();
+        model.addAttribute("proyectos", proyectos);
+        return "proyectos";
     }
 
-    @PutMapping("/actualizarProyecto/{id}")
-    public ResponseEntity<Proyecto> actualizarProyecto(@PathVariable Long id, @RequestBody Proyecto proyecto) {
-        Proyecto proyectoExistente = proyectoService.obtenerProyectoPorId(id);
-        if (proyectoExistente != null) {
-            Proyecto proyectoActualizado = proyectoService.actualizarProyecto(proyecto);
-            return ResponseEntity.ok(proyectoActualizado);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/proyecto/borrar/{id}")
+    public String borrar(Model model, @PathVariable int id) {
+        Proyecto proyecto = proyectoService.obtenerProyectoPorId(id);
+        proyectoService.borrarProyecto(proyecto);
+        List<Proyecto> proyectos = proyectoService.obtenerTodosLosProyectos();
+        model.addAttribute("proyectos", proyectos);
+        return "proyectos";
     }
 
-    @DeleteMapping("/eliminarProyecto/{id}")
-    public ResponseEntity<Void> eliminarProyecto(@PathVariable Long id, @RequestBody Proyecto proyecto) {
-        Proyecto proyectoExistente = proyectoService.obtenerProyectoPorId(id);
-        if (proyectoExistente != null) {
-            proyectoService.borrarProyecto(proyecto);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }

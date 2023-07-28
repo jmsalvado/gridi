@@ -16,9 +16,7 @@ public class ProyectoService {
         return proyectoRepository.findAll();
     }
 
-    public Proyecto obtenerProyectoPorId(Long id) {
-        return proyectoRepository.findById(id).get();
-    }
+    public Proyecto obtenerProyectoPorId(int id) { return proyectoRepository.findById(id).get(); }
 
     public Proyecto crearProyecto(Proyecto proyecto) {
         return proyectoRepository.save(proyecto);

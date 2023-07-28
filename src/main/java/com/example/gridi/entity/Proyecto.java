@@ -2,24 +2,22 @@ package com.example.gridi.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 public class Proyecto {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
     private String nombre;
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "incidencias", referencedColumnName = "id")
-    private List<Incidencia> incidencias;
     
     public Proyecto() {
     }
     
-    public Proyecto(int id, String nombre, List<Incidencia> incidencias) {
+    public Proyecto(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.incidencias = incidencias;
     }
     
 	public int getId() {
@@ -36,14 +34,6 @@ public class Proyecto {
 	
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-	
-	public List<Incidencia> getIncidencias() {
-		return incidencias;
-	}
-	
-	public void setIncidencias(List<Incidencia> incidencias) {
-		this.incidencias = incidencias;
 	}
 
 }

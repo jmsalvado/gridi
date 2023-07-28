@@ -1,6 +1,5 @@
 package com.example.gridi.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -8,13 +7,9 @@ import jakarta.persistence.Id;
 public class Usuario {
 
 	@Id
-	@Column(name="nombre")
 	private String nombre;
-	@Column(name="correo_electronico")
     private String correoElectronico;
-	@Column(name="contraseña")
     private String contraseña;
-	@Column(name="rol")
     private Rol rol;
     
     public Usuario() {

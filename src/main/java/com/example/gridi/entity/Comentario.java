@@ -1,7 +1,6 @@
 package com.example.gridi.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Date;
 @Entity
@@ -11,14 +10,18 @@ public class Comentario {
 	private int id;
     private String contenido;
     private Date fecha;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "incidencia", referencedColumnName = "id")
+	private Incidencia incidencia;
     
 	public Comentario() {
     }
 	
-	public Comentario(int id, String contenido, Date fecha) {
+	public Comentario(int id, String contenido, Date fecha, Incidencia incidencia) {
         this.id = id;
         this.contenido = contenido;
         this.fecha = fecha;
+		this.incidencia = incidencia;
     }
 
 	public void setId(int id) { this.id = id; }
@@ -40,5 +43,9 @@ public class Comentario {
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
+
+	public Incidencia getIncidencia() { return incidencia; }
+
+	public void setIncidencia(Incidencia incidencia) { this.incidencia = incidencia; }
 
 }

@@ -1,62 +1,67 @@
 package com.example.gridi.controller;
 
 import com.example.gridi.entity.Incidencia;
+import com.example.gridi.entity.Proyecto;
+import com.example.gridi.entity.Usuario;
 import com.example.gridi.service.IncidenciaService;
+import com.example.gridi.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class IncidenciaController {
 
     @Autowired
     private IncidenciaService incidenciaService;
+    @Autowired
+    private UsuarioService usuarioService;
 
-    @GetMapping("/incidencias")
-    public ResponseEntity<List<Incidencia>> obtenerIncidencias() {
-        List<Incidencia> incidencias = incidenciaService.obtenerTodasLasIncidencias();
-        return ResponseEntity.ok(incidencias);
+    @GetMapping("/incidencias/{id}")
+    public String incidencias(Model model, @PathVariable int id) {
+        List<Incidencia> incidencias = incidenciaService.obtenerTodasLasIncidencias().stream().filter(i -> i.getProyecto().getId() == id).collect(Collectors.toList());
+        model.addAttribute("incidencias", incidencias);
+        return "incidencias";
     }
 
-    @GetMapping("/obtenerIncidenciaPorId/{id}")
-    public ResponseEntity<Incidencia> obtenerIncidenciaPorId(@PathVariable Long id) {
+    @GetMapping("/incidencia")
+    public String incidencia(Model model) {
+        List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
+        model.addAttribute("incidencia", new Incidencia());
+        model.addAttribute("usuarios", usuarios);
+        return "incidencia";
+    }
+
+    @GetMapping("/incidencia/editar/{id}")
+    public String editar(Model model, @PathVariable int id) {
         Incidencia incidencia = incidenciaService.obtenerIncidenciaPorId(id);
-        if (incidencia != null) {
-            return ResponseEntity.ok(incidencia);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
+        model.addAttribute("incidencia", incidencia);
+        model.addAttribute("usuarios", usuarios);
+        return "incidencia";
     }
 
-    @PostMapping("/crearIncidencia")
-    public ResponseEntity<Incidencia> crearIncidencia(@RequestBody Incidencia incidencia) {
-        Incidencia nuevaIncidencia = incidenciaService.crearIncidencia(incidencia);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevaIncidencia);
+    @PostMapping("/incidencia/guardar")
+    public String guardar(Model model, @ModelAttribute Incidencia incidencia) {
+        incidenciaService.actualizarIncidencia(incidencia);
+        List<Incidencia> incidencias = incidenciaService.obtenerTodasLasIncidencias();
+        model.addAttribute("incidencias", incidencias);
+        return "incidencias";
     }
 
-    @PutMapping("/actualizarIncidencia/{id}")
-    public ResponseEntity<Incidencia> actualizarIncidencia(@PathVariable Long id, @RequestBody Incidencia incidencia) {
-        Incidencia incidenciaExistente = incidenciaService.obtenerIncidenciaPorId(id);
-        if (incidenciaExistente != null) {
-            Incidencia incidenciaActualizada = incidenciaService.actualizarIncidencia(incidencia);
-            return ResponseEntity.ok(incidenciaActualizada);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/incidencia/borrar/{id}")
+    public String borrar(Model model, @PathVariable int id) {
+        Incidencia incidencia = incidenciaService.obtenerIncidenciaPorId(id);
+        incidenciaService.borrarIncidencia(incidencia);
+        List<Incidencia> incidencias = incidenciaService.obtenerTodasLasIncidencias();
+        model.addAttribute("incidencias", incidencias);
+        return "incidencias";
     }
 
-    @DeleteMapping("/eliminarIncidencia/{id}")
-    public ResponseEntity<Void> eliminarIncidencia(@PathVariable Long id, @RequestBody Incidencia incidencia) {
-        Incidencia incidenciaExistente = incidenciaService.obtenerIncidenciaPorId(id);
-        if (incidenciaExistente != null) {
-            incidenciaService.borrarIncidencia(incidencia);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }

@@ -1,7 +1,6 @@
 package com.example.gridi.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Metrica {
@@ -10,14 +9,18 @@ public class Metrica {
 	private int id;
     private String nombre;
     private double valor;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "informe", referencedColumnName = "id")
+	private Informe informe;
 	
 	public Metrica() {
     }
 	
-	public Metrica(int id, String nombre, double valor) {
-        this.setId(id);
-        this.setNombre(nombre);
-        this.setValor(valor);
+	public Metrica(int id, String nombre, double valor, Informe informe) {
+        this.id = id;
+        this.nombre = nombre;
+        this.valor = valor;
+		this.informe = informe;
     }
 
 	public int getId() {
@@ -43,5 +46,9 @@ public class Metrica {
 	public void setValor(double valor) {
 		this.valor = valor;
 	}
+
+	public Informe getInforme() { return informe; }
+
+	public void setInforme(Informe informe) { this.informe = informe; }
 
 }

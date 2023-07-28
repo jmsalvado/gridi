@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IncidenciaRepository extends JpaRepository<Incidencia, String> {
 
-	Optional<Incidencia> findById(Long id);
+	Optional<Incidencia> findById(int id);
 	
 }

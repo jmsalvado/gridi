@@ -16,7 +16,7 @@ public class IncidenciaService {
         return incidenciaRepository.findAll();
     }
 
-    public Incidencia obtenerIncidenciaPorId(Long id) {
+    public Incidencia obtenerIncidenciaPorId(int id) {
         return incidenciaRepository.findById(id).get();
     }
 

@@ -3,30 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Formulario de Proyecto</title>
+    <link th:href="@{/css/gridi.css}" rel="stylesheet" />
 </head>
 <body>
 <h1>Formulario de Proyecto</h1>
 
-<form th:object="${proyecto}" th:action="@{/proyectos/save}" method="post">
-    <input type="hidden" th:field="*{id}">
-
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" th:field="*{nombre}">
-
-    <label for="descripcion">Descripción:</label>
-    <textarea id="descripcion" th:field="*{descripcion}"></textarea>
-
-    <button type="submit">Guardar</button>
-    <button type="button" onclick="window.location.href='/proyectos'">Cancelar</button>
-    <button type="button" onclick="borrarProyecto()">Borrar</button>
+<form th:object="${proyecto}" th:action="@{/proyecto/guardar}" method="post">
+    <div>
+        <input type="hidden" th:field="*{id}">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" th:field="*{nombre}">
+    </div>
+    <div>
+        <button type="submit" class="button btn btn-create">Guardar</button>
+        <a th:href="@{/proyectos}" class="button btn btn-edit">Cancelar</a>
+        <a th:href="@{/proyecto/borrar/{id}(id=${proyecto.id})}" class="button btn btn-delete">Borrar</a>
+    </div>
 </form>
-
-<script th:inline="javascript">
-    function borrarProyecto() {
-        if (confirm("¿Estás seguro de que deseas borrar el proyecto?")) {
-            window.location.href = '/proyectos/delete/' + [[${proyecto.id}]];
-        }
-    }
-</script>
 </body>
 </html>

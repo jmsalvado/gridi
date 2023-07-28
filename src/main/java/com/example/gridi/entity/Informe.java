@@ -10,21 +10,21 @@ public class Informe {
 	@Id
 	private int id;
     private Date fechaGeneracion;
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "metricas", referencedColumnName = "id")
-    private List<Metrica> metricas;
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "autor", referencedColumnName = "nombre")
     private Usuario autor;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "incidencia", referencedColumnName = "id")
+	private Incidencia incidencia;
     
 	public Informe() {
     }
 	
-	public Informe(int id, Date fechaGeneracion, List<Metrica> metricas, Usuario autor) {
+	public Informe(int id, Date fechaGeneracion, Usuario autor, Incidencia incidencia) {
         this.id = id;
         this.fechaGeneracion = fechaGeneracion;
-        this.metricas = metricas;
         this.autor = autor;
+		this.incidencia = incidencia;
     }
     
 	public int getId() {
@@ -43,14 +43,6 @@ public class Informe {
 		this.fechaGeneracion = fechaGeneracion;
 	}
 	
-	public List<Metrica> getMetricas() {
-		return metricas;
-	}
-	
-	public void setMetricas(List<Metrica> metricas) {
-		this.metricas = metricas;
-	}
-	
 	public Usuario getAutor() {
 		return autor;
 	}
@@ -58,5 +50,9 @@ public class Informe {
 	public void setAutor(Usuario autor) {
 		this.autor = autor;
 	}
+
+	public Incidencia getIncidencia() { return incidencia; }
+
+	public void setIncidencia(Incidencia incidencia) { this.incidencia = incidencia; }
 
 }
