@@ -8,88 +8,52 @@
 <body>
 <h1>Formulario de Informe</h1>
 
-<form th:object="${informe}" th:action="@{/informes/save}" method="post">
+<form th:object="${informe}" th:action="@{/informe/guardar}" method="post">
   <input type="hidden" th:field="*{id}">
-
-  <label for="titulo">Título:</label>
-  <input type="text" id="titulo" th:field="*{titulo}">
-
-  <label for="descripcion">Descripción:</label>
-  <textarea id="descripcion" th:field="*{descripcion}"></textarea>
-
-  <h2>Métricas</h2>
-  <ul id="metricasList">
-    <li th:each="metrica : ${informe.metricas}">
-      <span th:text="${metrica.nombre}"></span> - <span th:text="${metrica.valor}"></span>
-    </li>
-  </ul>
-
-  <label for="nuevaMetricaNombre">Nombre Métrica:</label>
-  <input type="text" id="nuevaMetricaNombre" th:field="*{nuevaMetricaNombre}">
-
-  <label for="nuevaMetricaValor">Valor Métrica:</label>
-  <input type="text" id="nuevaMetricaValor" th:field="*{nuevaMetricaValor}">
-
-  <button type="button" onclick="agregarMetrica()">Agregar Métrica</button>
-
-  <h2>Usuarios</h2>
-  <ul id="usuariosList">
-    <li th:each="usuario : ${informe.usuarios}">
-      <span th:text="${usuario.nombre}"></span> - <span th:text="${usuario.correoElectronico}"></span>
-    </li>
-  </ul>
-
-  <label for="nuevoUsuarioNombre">Nombre Usuario:</label>
-  <input type="text" id="nuevoUsuarioNombre" th:field="*{nuevoUsuarioNombre}">
-
-  <label for="nuevoUsuarioCorreo">Correo Electrónico Usuario:</label>
-  <input type="text" id="nuevoUsuarioCorreo" th:field="*{nuevoUsuarioCorreo}">
-
-  <button type="button" onclick="agregarUsuario()">Agregar Usuario</button>
-
-  <button type="submit">Guardar</button>
-  <button type="button" onclick="window.location.href='/informes'">Cancelar</button>
-  <button type="button" onclick="borrarInforme()">Borrar</button>
+  <div>
+    <h2>Título</h2>
+    <input type="text" id="titulo" th:field="*{titulo}">
+  </div>
+  <div>
+    <h2>Descripción</h2>
+    <textarea id="descripcion" rows="5" cols="100" th:field="*{descripcion}"></textarea>
+  </div>
+  <div>
+    <h2>Métricas</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Valor</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="metrica : ${informe.metricas}">
+        <td th:text="${metrica.nombre}"></td>
+        <td th:text="${metrica.valor}"></td>
+      </tr>
+      </tbody>
+    </table>
+    <label for="nuevaMetricaNombre">Nombre:</label>
+    <input type="text" id="nuevaMetricaNombre" th:field="*{nuevaMetrica.nombre}">
+    <label for="nuevaMetricaValor">Valor:</label>
+    <input type="text" id="nuevaMetricaValor" th:field="*{nuevaMetrica.valor}">
+  </div>
+  <div>
+    <h2>Autor</h2>
+    <select id="usuario" th:field="*{autor}">
+      <option value=""></option>
+      <option th:each="usu : ${usuarios}"
+              th:value="${usu.id}"
+              th:text="${usu.nombre}">
+      </option>
+    </select>
+  </div>
+  <div>
+    <button type="submit" class="button btn btn-create">Guardar</button>
+    <a th:href="@{/informes/{id}(id=${informe.incidencia.id})}" class="button btn btn-edit">Cancelar</a>
+    <a th:if="${informe.id > 0}" th:href="@{/informe/borrar/{id}(id=${informe.id})}" class="button btn btn-delete">Borrar</a>
+  </div>
 </form>
-
-<script th:inline="javascript">
-  function agregarMetrica() {
-    var nuevaMetricaNombre = document.getElementById("nuevaMetricaNombre").value;
-    var nuevaMetricaValor = document.getElementById("nuevaMetricaValor").value;
-
-    if (nuevaMetricaNombre.trim() !== "" && nuevaMetricaValor.trim() !== "") {
-      var metricasList = document.getElementById("metricasList");
-
-      var newMetrica = document.createElement("li");
-      newMetrica.innerHTML = "<span>" + nuevaMetricaNombre + "</span> - <span>" + nuevaMetricaValor + "</span>";
-      metricasList.appendChild(newMetrica);
-
-      document.getElementById("nuevaMetricaNombre").value = "";
-      document.getElementById("nuevaMetricaValor").value = "";
-    }
-  }
-
-  function agregarUsuario() {
-    var nuevoUsuarioNombre = document.getElementById("nuevoUsuarioNombre").value;
-    var nuevoUsuarioCorreo = document.getElementById("nuevoUsuarioCorreo").value;
-
-    if (nuevoUsuarioNombre.trim() !== "" && nuevoUsuarioCorreo.trim() !== "") {
-      var usuariosList = document.getElementById("usuariosList");
-
-      var newUsuario = document.createElement("li");
-      newUsuario.innerHTML = "<span>" + nuevoUsuarioNombre + "</span> - <span>" + nuevoUsuarioCorreo + "</span>";
-      usuariosList.appendChild(newUsuario);
-
-      document.getElementById("nuevoUsuarioNombre").value = "";
-      document.getElementById("nuevoUsuarioCorreo").value = "";
-    }
-  }
-
-  function borrarInforme() {
-    if (confirm("¿Estás seguro de que deseas borrar el informe?")) {
-      window.location.href = '/informes/delete/' + [[${informe.id}]];
-    }
-  }
-</script>
 </body>
 </html>

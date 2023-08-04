@@ -16,7 +16,7 @@ public class MetricaService {
         return metricaRepository.findAll();
     }
 
-    public Metrica obtenerMetricaPorId(Long id) {
+    public Metrica obtenerMetricaPorId(int id) {
         return metricaRepository.findById(id).get();
     }
 

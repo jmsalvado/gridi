@@ -16,7 +16,7 @@ public class InformeService {
         return informeRepository.findAll();
     }
 
-    public Informe obtenerInformePorId(Long id) {
+    public Informe obtenerInformePorId(int id) {
         return informeRepository.findById(id).get();
     }
 

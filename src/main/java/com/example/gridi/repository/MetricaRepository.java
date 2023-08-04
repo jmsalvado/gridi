@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface MetricaRepository extends JpaRepository<Metrica, String> {
 
-	Optional<Metrica> findById(Long id);
+	Optional<Metrica> findById(int id);
 	
 }

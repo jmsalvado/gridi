@@ -34,6 +34,8 @@
     </select>
     <label for="fechaCreacion">Fecha de Creación:</label>
     <input type="date" id="fechaCreacion" th:field="*{fechaCreacion}">
+    <label for="tiempoImputado">Tiempo Imputado:</label>
+    <input type="text" id="tiempoImputado" th:field="*{tiempoImputado}">
   </div>
   <div>
     <h2>Descripción</h2>
@@ -50,12 +52,12 @@
       </thead>
       <tbody>
       <tr th:each="comentario : ${incidencia.comentarios}">
-        <td th:text="${comentario.getContenido()}"></td>
-        <td th:text="${comentario.getFecha()}"></td>
+        <td th:text="${comentario.contenido}"></td>
+        <td th:text="${comentario.fecha}"></td>
       </tr>
       </tbody>
     </table>
-    <textarea id="nuevoComentario" rows="5" cols="100" th:field="*{nuevoComentario}"></textarea>
+    <textarea id="nuevoComentario" rows="5" cols="100" th:field="*{nuevoComentario.contenido}"></textarea>
   </div>
   <div>
     <h2>Adjuntos</h2>
@@ -71,23 +73,22 @@
       </tr>
       </tbody>
     </table>
-    <input type="file" id="nuevoAdjunto" th:field="*{nuevoAdjunto}">
+    <input type="file" id="nuevoAdjunto" th:field="*{nuevoAdjunto.nombreArchivo}">
   </div>
   <div>
     <h2>Usuario</h2>
     <select id="usuario" th:field="*{usuario}">
       <option value=""></option>
       <option th:each="usu : ${usuarios}"
-              th:value="${usu.getNombre()}"
-              th:text="${usu.getNombre()}"
-              th:selected="(${usu.getNombre()} == *{usuario.getNombre()})">
+              th:value="${usu.id}"
+              th:text="${usu.nombre}">
       </option>
     </select>
   </div>
   <div>
     <button type="submit" class="button btn btn-create">Guardar</button>
-    <a th:href="@{/incidencias/{id}(id=${incidencia.id})}" class="button btn btn-edit">Cancelar</a>
-    <a th:href="@{/incidencias/borrar/{id}(id=${incidencia.id})}" class="button btn btn-delete">Borrar</a>
+    <a th:href="@{/incidencias/{id}(id=${incidencia.proyecto.id})}" class="button btn btn-edit">Cancelar</a>
+    <a th:if="${incidencia.id > 0}" th:href="@{/incidencia/borrar/{id}(id=${incidencia.id})}" class="button btn btn-delete">Borrar</a>
   </div>
 </form>
 </body>

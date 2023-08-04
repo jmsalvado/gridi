@@ -1,15 +1,19 @@
 package com.example.gridi.entity;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 @Entity
 public class Comentario {
 
 	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private int id;
     private String contenido;
-    private Date fecha;
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date fecha = new Date();
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "incidencia", referencedColumnName = "id")
 	private Incidencia incidencia;

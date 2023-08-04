@@ -1,62 +1,80 @@
 package com.example.gridi.controller;
 
+import com.example.gridi.entity.Incidencia;
 import com.example.gridi.entity.Informe;
+import com.example.gridi.entity.Usuario;
+import com.example.gridi.service.IncidenciaService;
 import com.example.gridi.service.InformeService;
+import com.example.gridi.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class InformeController {
 
     @Autowired
     private InformeService informeService;
+    @Autowired
+    private IncidenciaService incidenciaService;
+    @Autowired
+    private UsuarioService usuarioService;
+    private int incidenciaId;
+    private int proyectoId;
 
-    @GetMapping("/informes")
-    public ResponseEntity<List<Informe>> obtenerInformes() {
-        List<Informe> informes = informeService.obtenerTodosLosInformes();
-        return ResponseEntity.ok(informes);
+    @GetMapping("/informes/{id}")
+    public String informes(Model model, @PathVariable int id) {
+        incidenciaId = id;
+        proyectoId = incidenciaService.obtenerIncidenciaPorId(incidenciaId).getProyecto().getId();
+        List<Informe> informes = informeService.obtenerTodosLosInformes().stream().filter(i -> i.getIncidencia().getId() == incidenciaId).collect(Collectors.toList());
+        model.addAttribute("informes", informes);
+        model.addAttribute("proyectoId", proyectoId);
+        return "informes";
     }
 
-    @GetMapping("/obtenerInformePorId/{id}")
-    public ResponseEntity<Informe> obtenerInformePorId(@PathVariable Long id) {
+    @GetMapping("/informe")
+    public String informe(Model model) {
+        List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
+        Informe informe = new Informe();
+        informe.setIncidencia(incidenciaService.obtenerIncidenciaPorId(incidenciaId));
+        model.addAttribute("informe", informe);
+        model.addAttribute("usuarios", usuarios);
+        return "informe";
+    }
+
+    @GetMapping("/informe/editar/{id}")
+    public String editar(Model model, @PathVariable int id) {
         Informe informe = informeService.obtenerInformePorId(id);
-        if (informe != null) {
-            return ResponseEntity.ok(informe);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
+        model.addAttribute("informe", informe);
+        model.addAttribute("usuarios", usuarios);
+        return "informe";
     }
 
-    @PostMapping("/crearInforme")
-    public ResponseEntity<Informe> crearInforme(@RequestBody Informe informe) {
-        Informe nuevoInforme = informeService.crearInforme(informe);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoInforme);
+    @PostMapping("/informe/guardar")
+    public String guardar(Model model, @ModelAttribute Informe informe) {
+        if (!informe.getNuevaMetrica().getNombre().equals("")) {
+            informe.addMetricas(informe.getNuevaMetrica());
+        }
+        informe.setIncidencia(incidenciaService.obtenerIncidenciaPorId(incidenciaId));
+        informeService.actualizarInforme(informe);
+        List<Informe> informes = informeService.obtenerTodosLosInformes().stream().filter(i -> i.getIncidencia().getId() == incidenciaId).collect(Collectors.toList());
+        model.addAttribute("informes", informes);
+        model.addAttribute("proyectoId", proyectoId);
+        return "informes";
     }
 
-    @PutMapping("/actualizarInforme/{id}")
-    public ResponseEntity<Informe> actualizarInforme(@PathVariable Long id, @RequestBody Informe informe) {
-        Informe informeExistente = informeService.obtenerInformePorId(id);
-        if (informeExistente != null) {
-            Informe informeActualizado = informeService.actualizarInforme(informe);
-            return ResponseEntity.ok(informeActualizado);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/eliminarInforme/{id}")
-    public ResponseEntity<Void> eliminarInforme(@PathVariable Long id, @RequestBody Informe informe) {
-        Informe informeExistente = informeService.obtenerInformePorId(id);
-        if (informeExistente != null) {
-            informeService.borrarInforme(informe);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/informe/borrar/{id}")
+    public String borrar(Model model, @PathVariable int id) {
+        Informe informe = informeService.obtenerInformePorId(id);
+        informeService.borrarInforme(informe);
+        List<Informe> informes = informeService.obtenerTodosLosInformes().stream().filter(i -> i.getIncidencia().getId() == incidenciaId).collect(Collectors.toList());
+        model.addAttribute("informes", informes);
+        model.addAttribute("proyectoId", proyectoId);
+        return "informes";
     }
 }

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 public class Adjunto {
 
 	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private int id;
     private String nombreArchivo;
     private String rutaArchivo;

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 public class Metrica {
 
 	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private int id;
     private String nombre;
     private double valor;

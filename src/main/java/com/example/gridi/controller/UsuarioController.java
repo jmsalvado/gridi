@@ -1,10 +1,9 @@
 package com.example.gridi.controller;
 
+import com.example.gridi.entity.Proyecto;
 import com.example.gridi.entity.Usuario;
 import com.example.gridi.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,46 +17,39 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping("/usuarios")
-    public String obtenerUsuarios(Model model) {
+    public String usuarios(Model model) {
         List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
+        model.addAttribute("usuarios", usuarios);
         return "usuarios";
     }
 
-    @GetMapping("/obtenerUsuarioPorId/{id}")
-    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable String id) {
+    @GetMapping("/usuario")
+    public String usuario(Model model) {
+        model.addAttribute("usuario", new Usuario());
+        return "usuario";
+    }
+
+    @GetMapping("/usuario/editar/{id}")
+    public String editar(Model model, @PathVariable int id) {
         Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        model.addAttribute("usuario", usuario);
+        return "usuario";
     }
 
-    @PostMapping("/crearUsuario")
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
-        Usuario nuevoUsuario = usuarioService.crearUsuario(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
+    @PostMapping("/usuario/guardar")
+    public String guardar(Model model, @ModelAttribute Usuario usuario) {
+        usuarioService.actualizarUsuario(usuario);
+        List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
+        model.addAttribute("usuarios", usuarios);
+        return "usuarios";
     }
 
-    @PutMapping("/actualizarUsuario/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable String id, @RequestBody Usuario usuario) {
-        Usuario usuarioExistente = usuarioService.obtenerUsuarioPorId(id);
-        if (usuarioExistente != null) {
-            Usuario usuarioActualizado = usuarioService.actualizarUsuario(usuario);
-            return ResponseEntity.ok(usuarioActualizado);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/eliminarUsuario/{id}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable String id, @RequestBody Usuario usuario) {
-        Usuario usuarioExistente = usuarioService.obtenerUsuarioPorId(id);
-        if (usuarioExistente != null) {
-            usuarioService.borrarUsuario(usuario);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/usuario/borrar/{id}")
+    public String borrar(Model model, @PathVariable int id) {
+        Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
+        usuarioService.borrarUsuario(usuario);
+        List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
+        model.addAttribute("usuarios", usuarios);
+        return "usuarios";
     }
 }

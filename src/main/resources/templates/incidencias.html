@@ -13,6 +13,7 @@
     <th>Descripción</th>
     <th>Prioridad</th>
     <th>Estado</th>
+    <th>Tiempo Imputado</th>
     <th>Fecha de Creación</th>
     <th>Acciones</th>
   </tr>
@@ -23,16 +24,19 @@
     <td th:text="${incidencia.descripcion}"></td>
     <td th:text="${incidencia.prioridad}"></td>
     <td th:text="${incidencia.estado}"></td>
+    <td th:text="${incidencia.tiempoImputado}"></td>
     <td th:text="${incidencia.fechaCreacion}"></td>
     <td>
       <a th:href="@{/incidencia/editar/{id}(id=${incidencia.id})}" class="button btn btn-edit">Editar</a>
       <a th:href="@{/incidencia/borrar/{id}(id=${incidencia.id})}" class="button btn btn-delete">Borrar</a>
+      <a th:href="@{/informes/{id}(id=${incidencia.id})}" class="button btn btn-create">Ir a Informes</a>
     </td>
   </tr>
   </tbody>
 </table>
 <div>
   <a th:href="@{/incidencia}" class="button">Crear Incidencia</a>
+  <a th:href="@{/proyectos}" class="button">Ir a Proyectos</a>
 </div>
 </body>
 </html>

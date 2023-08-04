@@ -10,6 +10,8 @@
   <thead>
   <tr>
     <th>ID</th>
+    <th>Título</th>
+    <th>Descripción</th>
     <th>Fecha de Generación</th>
     <th>Autor</th>
     <th>Acciones</th>
@@ -18,17 +20,20 @@
   <tbody>
   <tr th:each="informe : ${informes}">
     <td th:text="${informe.id}"></td>
+    <td th:text="${informe.titulo}"></td>
+    <td th:text="${informe.descripcion}"></td>
     <td th:text="${informe.fechaGeneracion}"></td>
-    <td th:text="${informe.autor}"></td>
+    <td th:text="${informe.autor.nombre}"></td>
     <td>
-      <button class="btn btn-edit">Editar</button>
-      <button class="btn btn-delete">Borrar</button>
+      <a th:href="@{/informe/editar/{id}(id=${informe.id})}" class="button btn btn-edit">Editar</a>
+      <a th:href="@{/informe/borrar/{id}(id=${informe.id})}" class="button btn btn-delete">Borrar</a>
     </td>
   </tr>
   </tbody>
 </table>
 <div>
-  <button class="btn btn-create">Crear Informe</button>
+  <a th:href="@{/informe}" class="button">Crear Informe</a>
+  <a th:href="@{/incidencias/{id}(id=${proyectoId})}" class="button">Ir a Incidencias</a>
 </div>
 </body>
 </html>

@@ -9,15 +9,19 @@
 <h1>Formulario de Proyecto</h1>
 
 <form th:object="${proyecto}" th:action="@{/proyecto/guardar}" method="post">
+    <input type="hidden" th:field="*{id}">
     <div>
-        <input type="hidden" th:field="*{id}">
-        <label for="nombre">Nombre:</label>
+        <h2>Nombre</h2>
         <input type="text" id="nombre" th:field="*{nombre}">
+    </div>
+    <div>
+        <h2>Descripción</h2>
+        <textarea id="descripcion" rows="5" cols="100" th:field="*{descripcion}"></textarea>
     </div>
     <div>
         <button type="submit" class="button btn btn-create">Guardar</button>
         <a th:href="@{/proyectos}" class="button btn btn-edit">Cancelar</a>
-        <a th:href="@{/proyecto/borrar/{id}(id=${proyecto.id})}" class="button btn btn-delete">Borrar</a>
+        <a th:if="${proyecto.id > 0}" th:href="@{/proyecto/borrar/{id}(id=${proyecto.id})}" class="button btn btn-delete">Borrar</a>
     </div>
 </form>
 </body>

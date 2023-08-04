@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface InformeRepository extends JpaRepository<Informe, String> {
 
-	Optional<Informe> findById(Long id);
+	Optional<Informe> findById(int id);
 	
 }

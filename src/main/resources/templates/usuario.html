@@ -8,36 +8,27 @@
 <body>
 <h1>Formulario de Usuario</h1>
 
-<form th:object="${usuario}" th:action="@{/usuarios/save}" method="post">
+<form th:object="${usuario}" th:action="@{/usuario/guardar}" method="post">
   <input type="hidden" th:field="*{id}">
-
-  <label for="nombre">Nombre:</label>
-  <input type="text" id="nombre" th:field="*{nombre}">
-
-  <label for="correoElectronico">Correo Electrónico:</label>
-  <input type="email" id="correoElectronico" th:field="*{correoElectronico}">
-
-  <label for="contrasena">Contraseña:</label>
-  <input type="password" id="contrasena" th:field="*{contrasena}">
-
-  <label for="rol">Rol:</label>
-  <select id="rol" th:field="*{rol}">
-    <option value="Administrador">Administrador</option>
-    <option value="Desarrollador">Desarrollador</option>
-    <option value="Usuario">Usuario</option>
-  </select>
-
-  <button type="submit">Guardar</button>
-  <button type="button" onclick="window.location.href='/usuarios'">Cancelar</button>
-  <button type="button" onclick="borrarUsuario()">Borrar</button>
+  <div>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" th:field="*{nombre}">
+    <label for="correoElectronico">Correo Electrónico:</label>
+    <input type="email" id="correoElectronico" th:field="*{correoElectronico}">
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" id="contrasena" th:field="*{contraseña}">
+    <label for="rol">Rol:</label>
+    <select id="rol" th:field="*{rol}">
+      <option value="ADMINISTRADOR">Administrador</option>
+      <option value="DESARROLLADOR">Desarrollador</option>
+      <option value="USUARIO">Usuario</option>
+    </select>
+  </div>
+  <div>
+    <button type="submit" class="button btn btn-create">Guardar</button>
+    <a th:href="@{/usuarios}" class="button btn btn-edit">Cancelar</a>
+    <a th:if="${usuario.id > 0}" th:href="@{/usuario/borrar/{id}(id=${usuario.id})}" class="button btn btn-delete">Borrar</a>
+  </div>
 </form>
-
-<script th:inline="javascript">
-  function borrarUsuario() {
-    if (confirm("¿Estás seguro de que deseas borrar el usuario?")) {
-      window.location.href = '/usuarios/delete/' + [[${usuario.id}]];
-    }
-  }
-</script>
 </body>
 </html>

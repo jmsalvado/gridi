@@ -1,26 +1,35 @@
 package com.example.gridi.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Usuario {
 
 	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	private int id;
 	private String nombre;
     private String correoElectronico;
     private String contraseña;
-    private Rol rol;
+    private String rol;
     
     public Usuario() {
     }
     
-    public Usuario(String nombre, String correoElectronico, String contraseña, Rol rol) {
+    public Usuario(int id, String nombre, String correoElectronico, String contraseña, String rol) {
+		this.id = id;
         this.nombre = nombre;
         this.correoElectronico = correoElectronico;
         this.contraseña = contraseña;
         this.rol = rol;
     }
+
+	public int getId() { return id; }
+
+	public void setId(int id) { this.id = id; }
     
 	public String getNombre() {
 		return nombre;
@@ -46,11 +55,11 @@ public class Usuario {
 		this.contraseña = contraseña;
 	}
 	
-	public Rol getRol() {
+	public String getRol() {
 		return rol;
 	}
 	
-	public void setRol(Rol rol) {
+	public void setRol(String rol) {
 		this.rol = rol;
 	}
 

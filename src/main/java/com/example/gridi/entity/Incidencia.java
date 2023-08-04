@@ -3,28 +3,29 @@ package com.example.gridi.entity;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Entity
 public class Incidencia {
 
 	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private int id;
 	private String descripcion;
-	private Prioridad prioridad;
-	private Categoria categoria;
-	private Estado estado;
+	private String prioridad;
+	private String categoria;
+	private String estado;
+	private  int tiempoImputado;
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date fechaCreacion;
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "comentarios", referencedColumnName = "id")
-	private List<Comentario> comentarios;
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "adjuntos", referencedColumnName = "id")
-	private List<Adjunto> adjuntos;
+	private Date fechaCreacion = new Date();
+	@OneToMany(mappedBy = "incidencia", cascade = CascadeType.ALL)
+	private List<Comentario> comentarios = new ArrayList<>();
+	@OneToMany(mappedBy = "incidencia", cascade = CascadeType.ALL)
+	private List<Adjunto> adjuntos = new ArrayList<>();
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "usuario", referencedColumnName = "nombre")
+	@JoinColumn(name = "usuario", referencedColumnName = "id")
 	private Usuario usuario;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "proyecto", referencedColumnName = "id")
@@ -37,13 +38,14 @@ public class Incidencia {
     public Incidencia() {
 	}
     
-    public Incidencia(int id, String descripcion, Prioridad prioridad, Categoria categoria, Estado estado, 
+    public Incidencia(int id, String descripcion, String prioridad, String categoria, String estado, int tiempoImputado,
             Date fechaCreacion, List<Comentario> comentarios, List<Adjunto> adjuntos, Usuario usuario, Proyecto proyecto) {
     	this.id = id;
 		this.descripcion = descripcion;
 		this.prioridad = prioridad;
 		this.categoria = categoria;
 		this.estado = estado;
+		this.tiempoImputado = tiempoImputado;
 		this.fechaCreacion = fechaCreacion;
 		this.comentarios = comentarios;
 		this.adjuntos = adjuntos;
@@ -67,29 +69,32 @@ public class Incidencia {
 		this.descripcion = descripcion;
 	}
 	
-	public Prioridad getPrioridad() {
+	public String getPrioridad() {
 		return prioridad;
 	}
 	
-	public void setPrioridad(Prioridad prioridad) {
+	public void setPrioridad(String prioridad) {
 		this.prioridad = prioridad;
 	}
 	
-	public Categoria getCategoria() {
+	public String getCategoria() {
 		return categoria;
 	}
 	
-	public void setCategoria(Categoria categoria) {
+	public void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
 	
-	public Estado getEstado() {
+	public String getEstado() {
 		return estado;
 	}
 	
-	public void setEstado(Estado estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+	public int getTiempoImputado() { return tiempoImputado; }
+
+	public void setTiempoImputado(int tiempoImputado) { this.tiempoImputado = tiempoImputado; }
 	
 	public Date getFechaCreacion() {
 		return fechaCreacion;
@@ -106,6 +111,11 @@ public class Incidencia {
 	public void setComentarios(List<Comentario> comentarios) {
 		this.comentarios = comentarios;
 	}
+
+	public void addComentarios(Comentario comentario) {
+		comentario.setIncidencia(this);
+		this.comentarios.add(comentario);
+	}
 	
 	public List<Adjunto> getAdjuntos() {
 		return adjuntos;
@@ -113,6 +123,11 @@ public class Incidencia {
 	
 	public void setAdjuntos(List<Adjunto> adjuntos) {
 		this.adjuntos = adjuntos;
+	}
+
+	public void addAdjuntos(Adjunto adjunto) {
+		adjunto.setIncidencia(this);
+		this.adjuntos.add(adjunto);
 	}
 	
 	public Usuario getUsuario() {

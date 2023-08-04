@@ -6,7 +6,7 @@ public class Administrador extends Usuario {
         super();
     }
 	
-	public Administrador(String nombre, String correoElectronico, String contraseña) {
-        super(nombre, correoElectronico, contraseña, Rol.ADMINISTRADOR);
+	public Administrador(int id, String nombre, String correoElectronico, String contraseña) {
+        super(id, nombre, correoElectronico, contraseña, Rol.ADMINISTRADOR.toString());
     }
 }

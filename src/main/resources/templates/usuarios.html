@@ -23,14 +23,15 @@
     <td th:text="${usuario.correoElectronico}"></td>
     <td th:text="${usuario.rol}"></td>
     <td>
-      <button class="btn btn-edit">Editar</button>
-      <button class="btn btn-delete">Borrar</button>
+      <a th:href="@{/usuario/editar/{id}(id=${usuario.id})}" class="button btn btn-edit">Editar</a>
+      <a th:href="@{/usuario/borrar/{id}(id=${usuario.id})}" class="button btn btn-delete">Borrar</a>
     </td>
   </tr>
   </tbody>
 </table>
 <div>
-  <button class="btn btn-create">Crear Usuario</button>
+  <a th:href="@{/usuario}" class="button">Crear Usuario</a>
+  <a th:href="@{/}" class="button">Ir a Principal</a>
 </div>
 </body>
 </html>

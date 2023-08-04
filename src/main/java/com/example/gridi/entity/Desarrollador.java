@@ -6,7 +6,7 @@ public class Desarrollador extends Usuario {
         super();
     }
     
-    public Desarrollador(String nombre, String correoElectronico, String contraseña) {
-        super(nombre, correoElectronico, contraseña, Rol.DESARROLLADOR);
+    public Desarrollador(int id, String nombre, String correoElectronico, String contraseña) {
+        super(id, nombre, correoElectronico, contraseña, Rol.DESARROLLADOR.toString());
     }
 }
