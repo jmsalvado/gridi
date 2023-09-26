@@ -36,9 +36,7 @@ public class Adjunto {
 		this.nombreArchivo = nombreArchivo;
 	}
 	
-	public String getRutaArchivo() {
-		return rutaArchivo;
-	}
+	public String getRutaArchivo() { return rutaArchivo; }
 	
 	public void setRutaArchivo(String rutaArchivo) {
 		this.rutaArchivo = rutaArchivo;
